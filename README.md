@@ -23,3 +23,8 @@ A search box will be available above the inbox where users can search for emails
 
 ##### Email attachments
 While editing emails, an "Add attachment" option will be displayed in the window which will allow users to add an attachment from their local machine to the email. Various file types will be available for attachment including common text, image, audio, and video formats. This attachment will be bundled with the message and sent to the user alongside it. For emails with attachments, the send feature will wait for the attachments to finish uploading to send the email to avoid sending incomplete packages. This feature will be integrated with Windows and macOS file browsers for reliable image selection and attachment.
+
+### Contributors
+Wil England - @wil-is-still-in-school
+Isaac Dyess - @isaacdyess
+Daniel Molsbarger - @Daniel-Molsbarger
