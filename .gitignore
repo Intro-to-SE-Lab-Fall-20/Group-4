@@ -1,0 +1,9 @@
+# Python virtual environment
+env
+
+# Python bytecode
+*.pyc
+__pycache__
+
+# Database files
+*.sqlite3
