@@ -1,16 +1,11 @@
 language: python # => 1
-    python: # => 2
-      - "3.6"
-      - "3.7"
-      - "3.8"
-      - "3.8-dev"
-    services: # => 3
-      - mysql
-    env: # => 4
-      -DJANGO=3.1 DB=mysql
-    install: # => 5
-      - pip install -r requirements.txt
-    before_script: # => 6
-      - mysql -e 'create database test;' -u root
-    script: # => 7
-      - python manage.py test
+python: # => 2
+  - "3.6"
+  - "3.7"
+  - "3.8"
+env: # => 3
+  -DJANGO=3.1 DB=mysql
+install: # => 4
+  - pip install -r requirements.txt
+script: # => 5
+  - python polymail/manage.py test
