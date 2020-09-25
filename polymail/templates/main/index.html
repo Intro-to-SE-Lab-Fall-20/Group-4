@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Polymail Home</title>
+</head>
+
+<h1>Polymail Home - Under Construction</h1>
+
+<body class="Polymail">
+{% if request.user.is_authenticated %}
+    <p>
+        Welcome  home, {{ request.user.first_name }}
+    </p>
+    <a href="/logout/">Logout</a>
+{% else %}
+    Please <a href="/accounts/login/">log in</a>
+{% endif %}
+</body>
+</html>
