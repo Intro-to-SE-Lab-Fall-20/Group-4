@@ -7,3 +7,6 @@ class EmailForm(forms.Form):
         cc = forms.CharField(label="cc", max_length=90)
         body = forms.CharField(label="Body", widget=forms.Textarea)
         attachment = forms.Field(label="attachment", widget = forms.FileInput)
+
+class SearchForm(forms.Form):
+        search_query = forms.CharField(label="Enter Search Term")

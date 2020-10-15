@@ -12,6 +12,12 @@
         Welcome  home, {{ request.user.first_name }}
     </p>
 
+    <form method="post">
+        {{ form }}
+        <div class="form-actions">
+            <button type="submit">SEARCH</button>
+        </div>
+    </form>
 
     <table class="table">
         <thead>

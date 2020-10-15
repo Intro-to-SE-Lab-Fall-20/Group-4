@@ -1,10 +1,11 @@
 from django.contrib.auth import logout
 from django.shortcuts import redirect, render
 
-from polymail.forms import EmailForm
+from polymail.forms import EmailForm, SearchForm
 
 def index(request):
-    return render(request, 'main/index.html')
+    form = SearchForm()
+    return render(request, 'main/index.html', {"form":form})
 
 def compose(request):
     if request.method == 'GET':
