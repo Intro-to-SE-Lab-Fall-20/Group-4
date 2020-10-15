@@ -16,6 +16,8 @@ def compose(request):
             subject = form.cleaned_data['subject']
             cc = form.cleaned_data['cc']
             body = form.cleaned_data['body']
+            attachment = request.FILES['attachment']
+            # TODO: try except for sending email
             return redirect('/')
     return render(request, "main/compose.html", {"form":form})
         
