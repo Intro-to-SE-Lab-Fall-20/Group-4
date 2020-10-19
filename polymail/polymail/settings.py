@@ -142,11 +142,10 @@ SOCIALACCOUNT_PROVIDERS = {
     'google': {
         'SCOPE': ['profile',
                   'email',
-                  'https://www.googleapis.com/auth/gmail.readonly'],
-        # 'APP': {
-        #     'client_id': os.environ['GOOGLE_OAUTH_CLIENT_ID'],
-        #     'secret': os.environ['GOOGLE_OAUTH_CLIENT_SECRET']
-        # },
+                  'https://www.googleapis.com/auth/gmail.compose'],
         'AUTH_PARAMS': {'access_type': 'online'}
     }
 }
+
+# Global handle to the Gmail service used to execute Gmail API calls
+_GMAIL_SERVICE = None

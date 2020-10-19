@@ -1,13 +1,16 @@
+
+<body>
 <h1>Polymail</h1>
 <h3>Compose</h3>
 
-<form method="post">
-    {# csrf_token goes here for confirmation #}
-    {{ form }}
-    <div class="form-actions">
-        <button type="submit">SEND EMAIL</button>
-    </div>
-</form>
+    <form method="post">
+        {% csrf_token %}
+        {{ form }}
+        <div class="form-actions">
+            <button type="submit">Send</button>
+        </div>
+    </form>
 
 <br><br><br>
 <a href="/">Return to Home</a>
+</body>

@@ -1,13 +1,19 @@
+from django.conf import settings
 import django.contrib.auth as auth
 from django.contrib.auth.models import User
 from django.shortcuts import redirect, render
-from googleapiclient.discovery import build
 
-from .models import UserProfile
-
-from polymail.forms import EmailForm, SearchForm
+from .forms import EmailForm, SearchForm
+from . import models
 
 def index(request):
+    if request.user.is_authenticated:
+        creds = models.UserProfile.get_google_credentials(request)
+        service = models.create_service_if_necessary(creds)
+
+        if service is None:
+            raise ValueError('Could not create Gmail API')
+
     if request.method == 'GET':
         form = SearchForm()
     else:
@@ -23,31 +29,47 @@ def compose(request):
         form = EmailForm()
     else:
         form = EmailForm(request.POST)
+
         if form.is_valid():
             to_email = form.cleaned_data['to_email']
             subject = form.cleaned_data['subject']
             cc = form.cleaned_data['cc']
             body = form.cleaned_data['body']
-            attachment = request.FILES['attachment']
-            # TODO: try except for sending email
+            # attachment = request.FILES['attachment']
+
+            sender = 'me' # FIXME This needs to be the logged in user's email
+
+            message = models.create_gmail_message(
+                sender,
+                to_email,
+                cc,
+                subject,
+                body,
+                attachment=None
+            )
+
+            service = settings._GMAIL_SERVICE
+            if service is None:
+                raise ValueError('service is None')
+
+            sent = models.send_gmail_message(service, user_id='me', message=message)
+
+            if not sent:
+                raise Exception('Error occurred sending email')
+
             return redirect('/')
-    return render(request, "main/compose.html", {"form":form})
-        
+
+    return render(request, 'main/compose.html', {'form': form})
 
 def logout(request):
     auth.logout(request)
     return redirect('/')
 
 def inbox(request):
-    creds = UserProfile.get_google_credentials(request)
+    # result = service.users().threads().list(userId='me').execute()
+    # threads = result['threads']
 
-    # TOOD This needs to be created on login and stored elsewhere (as a global?)
-    service = build('gmail', 'v1', credentials=creds)
-
-    result = service.users().threads().list(userId='me').execute()
-    threads = result['threads']
-
-    for thread in threads:
-        print(thread)
+    # for thread in threads:
+    #     print(thread)
 
     return redirect('/')
