@@ -131,14 +131,22 @@ ACCOUNT_LOGOUT_REDIRECT_URL = '/'
 
 # Authentication
 
+AUTHENTICATION_BACKENDS =(
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend'
+)
+
 SITE_ID = 1
 
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
-        'SCOPE': ['profile', 'email'],
-        'APP': {
-            'client_id': os.environ['GOOGLE_OAUTH_CLIENT_ID'],
-            'secret': os.environ['GOOGLE_OAUTH_CLIENT_SECRET']
-        }
+        'SCOPE': ['profile',
+                  'email',
+                  'https://www.googleapis.com/auth/gmail.readonly'],
+        # 'APP': {
+        #     'client_id': os.environ['GOOGLE_OAUTH_CLIENT_ID'],
+        #     'secret': os.environ['GOOGLE_OAUTH_CLIENT_SECRET']
+        # },
+        'AUTH_PARAMS': {'access_type': 'online'}
     }
 }
