@@ -11,9 +11,42 @@
     <p>
         Welcome  home, {{ request.user.first_name }}
     </p>
+
+    <form method="post">
+        {# csfr_token goes here #}
+        {{ form }}
+        <div class="form-actions">
+            <button type="submit">SEARCH</button>
+        </div>
+    </form>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>From</th>
+                <th>Subject</th>
+                <th>Body</th>
+                <th>Date-Time</th>
+            </tr>
+        </thead>
+        <tbody>
+            {# TODO: for email in email_list #}
+            <tr>
+                {# render here #}
+            </tr>
+        </tbody>
+    </table>
+
+    <br><br>
+    {# Options #}
+    <a href="/compose/">Compose Email</a>
+    <br>
+    <br>
     <a href="/logout/">Logout</a>
+
 {% else %}
     Please <a href="/accounts/login/">log in</a>
 {% endif %}
+
 </body>
 </html>
