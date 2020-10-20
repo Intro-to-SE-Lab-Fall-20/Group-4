@@ -7,6 +7,7 @@ from .forms import EmailForm, SearchForm
 from . import models
 
 def index(request):
+    messages = None
     if request.user.is_authenticated:
         creds = models.UserProfile.get_google_credentials(request)
         service = models.create_service_if_necessary(creds)
