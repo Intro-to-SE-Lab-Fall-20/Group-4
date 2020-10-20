@@ -16,6 +16,9 @@ def index(request):
 
     if request.method == 'GET':
         form = SearchForm()
+        service = settings._GMAIL_SERVICE
+        if (service is not None):
+            messages = models.get_inbox(service, user_id='me')
     else:
         form = SearchForm(request.POST)
         if form.is_valid():
@@ -65,11 +68,3 @@ def logout(request):
     auth.logout(request)
     return redirect('/')
 
-def inbox(request):
-    # result = service.users().threads().list(userId='me').execute()
-    # threads = result['threads']
-
-    # for thread in threads:
-    #     print(thread)
-
-    return redirect('/')
