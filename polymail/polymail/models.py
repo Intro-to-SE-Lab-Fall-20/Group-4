@@ -90,4 +90,4 @@ def get_inbox(service, user_id):
         msg = service.users().messages().get(userId='me', id=message['id']).execute()
         snippets.append(msg['snippet'])
     
-    return messages
+    return snippets
