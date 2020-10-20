@@ -81,3 +81,14 @@ def send_gmail_message(service, user_id, message):
     result = service.users().messages().send(userId=user_id, body=message).execute()
 
     return True
+
+def get_inbox(service, user_id):
+    results = service.users().messages().list(userId=user_id, labelIds=['INBOX']).execute()
+    messages = results['messages']
+    snippets = []
+    for message in messages:
+        msg = service.users().messages().get(userId='me', id=message['id']).execute()
+        snippets.append(msg['snippet'])
+
+    print(snippets)
+    return snippets
