@@ -25,7 +25,7 @@ def index(request):
             search_query = form.cleaned_data['search_query']
             # TODO: search for relevant emails and display in index
             return redirect('/')
-    return render(request, 'main/index.html', {"form":form})
+    return render(request, 'main/index.html', {"form":form, "messages": messages})
 
 def compose(request):
     if request.method == 'GET':
