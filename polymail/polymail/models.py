@@ -141,6 +141,5 @@ def get_inbox(service, user_id):
 
     return messages_list
 
-        
-    
-    return snippets
+def get_specific_message(service, thread_id):
+    return
