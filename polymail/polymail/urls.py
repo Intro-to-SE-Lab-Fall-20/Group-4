@@ -7,7 +7,7 @@ urlpatterns = [
     path('', views.index),
     path('logout/', views.logout),
     path('compose/', views.compose),
-    path('emailview/', views.emailview),
+    path('emailview/<str:thread_id>', views.emailview, name="emailview"),
     path('admin/', admin.site.urls),
     path('accounts/', include('allauth.urls'))
 ]
