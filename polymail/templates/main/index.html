@@ -12,6 +12,12 @@
         Welcome  home, {{ request.user.first_name }}
     </p>
 
+    {# Options #}
+    <a href="/compose/">Compose Email</a>
+    <br><br>
+    <a href="/logout/">Logout</a>
+    <br><br>
+
     <form method="post">
         {# csfr_token goes here #}
         {{ form }}
@@ -30,19 +36,18 @@
             </tr>
         </thead>
         <tbody>
-            {# TODO: for email in email_list #}
-            <tr>
-                {# render here #}
-            </tr>
+            {% for message in messages %}
+                <tr>
+                    <td>{{ message.Sender }}</td>
+                    <td>{{ message.Subject }}</td>
+                    <td>{{ message.Snippet }}</td>
+                    <td>{{ message.Date }}</td>
+                </tr>
+            {% endfor %}
         </tbody>
     </table>
 
     <br><br>
-    {# Options #}
-    <a href="/compose/">Compose Email</a>
-    <br>
-    <br>
-    <a href="/logout/">Logout</a>
 
 {% else %}
     Please <a href="/accounts/login/">log in</a>

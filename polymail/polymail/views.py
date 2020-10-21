@@ -7,6 +7,7 @@ from .forms import EmailForm, SearchForm
 from . import models
 
 def index(request):
+    messages = None
     if request.user.is_authenticated:
         creds = models.UserProfile.get_google_credentials(request)
         service = models.create_service_if_necessary(creds)
@@ -16,13 +17,16 @@ def index(request):
 
     if request.method == 'GET':
         form = SearchForm()
+        service = settings._GMAIL_SERVICE
+        if (service is not None):
+            messages = models.get_inbox(service, user_id='me')
     else:
         form = SearchForm(request.POST)
         if form.is_valid():
             search_query = form.cleaned_data['search_query']
             # TODO: search for relevant emails and display in index
             return redirect('/')
-    return render(request, 'main/index.html', {"form":form})
+    return render(request, 'main/index.html', {"form":form, "messages": messages})
 
 def compose(request):
     if request.method == 'GET':
@@ -65,11 +69,3 @@ def logout(request):
     auth.logout(request)
     return redirect('/')
 
-def inbox(request):
-    # result = service.users().threads().list(userId='me').execute()
-    # threads = result['threads']
-
-    # for thread in threads:
-    #     print(thread)
-
-    return redirect('/')
