@@ -65,6 +65,10 @@ def compose(request):
 
     return render(request, 'main/compose.html', {'form': form})
 
+def emailview(request, thread_id):
+    message = None
+    return render(request, 'main/view-email.html', {"message": message})
+
 def logout(request):
     auth.logout(request)
     return redirect('/')
