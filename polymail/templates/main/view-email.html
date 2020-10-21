@@ -1,7 +1,11 @@
 <body>
     <h1>Polymail</h1>
-    <h3>View Email</h3>
 
+    <h3>{{ message.Subject }}</h3>
+    <h5>{{ message.Sender }}</h5>
+    <br>
+    {% autoescape off %}{{ message.Body }}{% endautoescape %}
+    <p><small>Recieved on {{ message.Date }}</small></p>
 
     <br><br><br>
     <a href="/">Return to Home</a>

@@ -67,6 +67,10 @@ def compose(request):
 
 def emailview(request, thread_id):
     message = None
+    service = settings._GMAIL_SERVICE
+    if (service is not None):
+        message = models.get_specific_message(service, user_id='me', thread_id=thread_id)
+
     return render(request, 'main/view-email.html', {"message": message})
 
 def logout(request):
