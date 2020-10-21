@@ -93,7 +93,7 @@ def get_inbox(service, user_id):
     for thread in threads:
         temp_dict = {}
         msg_id = thread['id']
-        temp_dict['id'] = msg_id
+        temp_dict['id'] = str(msg_id)
         msg = service.users().messages().get(userId='me', id=msg_id).execute()
         payload = msg['payload']
         header = payload['headers']
