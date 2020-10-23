@@ -11,10 +11,7 @@ from googleapiclient.discovery import build
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import base64
-import time
 import dateutil.parser as parser
-from datetime import datetime
-from bs4 import BeautifulSoup
 
 def _on_delete(user):
     pass
@@ -153,6 +150,12 @@ def get_specific_message(service, user_id, thread_id):
             temp_dict['Sender'] = msg_from
         else:
             pass
+    for four in header:
+        if four['name'] == 'To':
+            msg_to = four['value']
+            temp_dict['To'] = msg_to
+        else:
+            pass
     temp_dict['Snippet'] = msg['snippet']
     try:
         msg_parts = payload['parts']
@@ -161,13 +164,19 @@ def get_specific_message(service, user_id, thread_id):
         part_data = part_body['data']
         msg_body = base64.urlsafe_b64decode(part_data)
         msg_body = msg_body.decode('utf-8')
-        """ clean_one = part_data.replace("-","+")
-        clean_one = clean_one.replace("_","/")
-        clean_two = base64.b64decode(bytes(clean_one, 'UTF-8'))
-        soup = BeautifulSoup(clean_two, 'lxml')
-        msg_body = soup.body() """
         temp_dict['Body'] = msg_body
     except: 
         temp_dict['Body'] = msg['snippet']
+
+    try:
+        msg_parts = payload['parts']
+        part_one = msg_parts[0]
+        part_body = part_one['body']
+        part_data = part_body['data']
+        msg_body = base64.urlsafe_b64decode(part_data)
+        msg_body = msg_body.decode('utf-8')
+        temp_dict['PlainBody'] = msg_body
+    except: 
+        temp_dict['PlainBody'] = msg['snippet']
 
     return temp_dict
