@@ -1,16 +1,18 @@
 <body>
     <h1>Polymail</h1>
-    <h3>View Email</h3>
 
-    <h4>From</h4>
-    <p>{{ from }}</p>
+    <h3>{{ message.Subject }}</h3>
+    <h5>{{ message.Sender }}</h5>
+    <br>
+    {% autoescape off %}{{ message.Body }}{% endautoescape %}
+    <p><small>Recieved on {{ message.Date }}</small></p>
 
-    <h4>Subject</h4>
-    <p>{{ subject }}</p>
+    <br>
+    <a href="/compose/">Reply</a>
+    <a href="/compose/{{ message.id }}/">Forward</a>
 
-    <h4>Body</h4>
-    <p>{{ body }}</p>
-
-    <p>{{ date-time }}</p>
+    <br><br><br>
+    <a href="/">Return to Home</a>
+    </body>
 
 </body>

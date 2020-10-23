@@ -11,10 +11,7 @@ from googleapiclient.discovery import build
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import base64
-import time
 import dateutil.parser as parser
-from datetime import datetime
-from bs4 import BeautifulSoup
 
 def _on_delete(user):
     pass
@@ -93,7 +90,7 @@ def get_inbox(service, user_id):
     for thread in threads:
         temp_dict = {}
         msg_id = thread['id']
-        temp_dict['id'] = msg_id
+        temp_dict['id'] = str(msg_id)
         msg = service.users().messages().get(userId='me', id=msg_id).execute()
         payload = msg['payload']
         header = payload['headers']
@@ -123,24 +120,63 @@ def get_inbox(service, user_id):
 
         temp_dict['Snippet'] = msg['snippet']
 
-        try:
-            msg_parts = payload['parts']
-            part_one = msg_parts[0]
-            part_body = part_one['body']
-            part_data = part_body['data']
-            clean_one = part_data.replace("-","+")
-            clean_one = clean_one.replace("_","/")
-            clean_two = base64.b64decode(bytes(clean_one, 'UTF-8'))
-            soup = BeautifulSoup(clean_two, 'lxml')
-            msg_body = soup.body()
-            temp_dict['Body'] = msg_body
-        except: 
-            pass
-
         messages_list.append(temp_dict)
 
     return messages_list
 
-        
-    
-    return snippets
+def get_specific_message(service, user_id, thread_id):
+    temp_dict = {}
+    temp_dict['id'] = thread_id
+    msg = service.users().messages().get(userId=user_id, id=thread_id, format="full").execute()
+    payload = msg['payload']
+    header = payload['headers']
+    for one in header:
+        if one['name'] == 'Subject':
+            msg_subject = one['value']
+            temp_dict['Subject'] = msg_subject
+        else:
+            pass
+    for two in header:
+        if two['name'] == 'Date':
+            msg_date = two['value']
+            date_parse = (parser.parse(msg_date))
+            m_date = (date_parse.date())
+            temp_dict['Date'] = str(m_date)
+        else:
+            pass
+    for three in header:
+        if three['name'] == 'From':
+            msg_from = three['value']
+            temp_dict['Sender'] = msg_from
+        else:
+            pass
+    for four in header:
+        if four['name'] == 'To':
+            msg_to = four['value']
+            temp_dict['To'] = msg_to
+        else:
+            pass
+    temp_dict['Snippet'] = msg['snippet']
+    try:
+        msg_parts = payload['parts']
+        part_one = msg_parts[1]
+        part_body = part_one['body']
+        part_data = part_body['data']
+        msg_body = base64.urlsafe_b64decode(part_data)
+        msg_body = msg_body.decode('utf-8')
+        temp_dict['Body'] = msg_body
+    except: 
+        temp_dict['Body'] = msg['snippet']
+
+    try:
+        msg_parts = payload['parts']
+        part_one = msg_parts[0]
+        part_body = part_one['body']
+        part_data = part_body['data']
+        msg_body = base64.urlsafe_b64decode(part_data)
+        msg_body = msg_body.decode('utf-8')
+        temp_dict['PlainBody'] = msg_body
+    except: 
+        temp_dict['PlainBody'] = msg['snippet']
+
+    return temp_dict
