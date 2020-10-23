@@ -28,9 +28,32 @@ def index(request):
             return redirect('/')
     return render(request, 'main/index.html', {"form":form, "messages": messages})
 
-def compose(request):
+def compose(request, thread_id):
     if request.method == 'GET':
-        form = EmailForm()
+        if thread_id != '0':
+            service = settings._GMAIL_SERVICE
+            if (service is not None):
+                message = models.get_specific_message(service, user_id='me', thread_id=thread_id)
+                subject = message['Subject']
+                sender = message['Sender']
+                date = message['Date']
+                to = message['To']
+                body = ("\n\n\n--------Forwarded message--------\nFrom: " + sender 
+                + "\nDate: " + date  + "\nSubject: " + subject + "\nTo: " + to + "\n\n")
+                body += message['PlainBody']
+                initial_dict = {
+                    "subject":subject,
+                    "body":body
+                }
+                form = EmailForm(initial=initial_dict)
+            else:
+                initial_dict = {
+                    "subject":"service failed"
+                }
+                form = EmailForm(initial=initial_dict)
+        else:
+            initial_dict = {}
+            form = EmailForm(initial=initial_dict)
     else:
         form = EmailForm(request.POST)
 
