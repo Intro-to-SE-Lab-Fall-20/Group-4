@@ -8,10 +8,19 @@ from allauth.socialaccount.models import SocialApp, SocialAccount
 from google.oauth2.credentials import Credentials
 from googleapiclient.discovery import build
 
-from email.mime.text import MIMEText
+import mimetypes
+
 from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from email.mime.base import MIMEBase
+from email.mime.image import MIMEImage
+from email.mime.audio import MIMEAudio
+
+import os
+
 import base64
 import dateutil.parser as parser
+
 
 def _on_delete(user):
     pass
@@ -64,19 +73,53 @@ def create_service_if_necessary(creds):
 
     return settings._GMAIL_SERVICE
 
-def create_gmail_message(sender, to, cc, subject, body, attachment):
-    message = MIMEText(body)
-    message['to'] = to
-    message['from'] = sender
-    message['subject'] = subject
-
-    if attachment:
-        print('Attachments are not yet supported but are in development')
+def create_gmail_message(sender, to, cc, subject, body, attachment_path):
+    if attachment_path:
+        message = _create_gmail_message_with_attachment(sender, to, cc, subject, body, attachment_path)
+    else:
+        message = MIMEText(body)
+        message['to'] = to
+        message['from'] = sender
+        message['subject'] = subject
 
     raw = base64.urlsafe_b64encode(message.as_bytes())
     raw = raw.decode()
 
     return {'raw': raw}
+
+def _create_gmail_message_with_attachment(sender, to, cc, subject, body, attachment_path):
+    message = MIMEMultipart()
+    message['to'] = to
+    message['from'] = sender
+    message['subject'] = subject
+    message.attach(MIMEText(body))
+
+    content_type, encoding = mimetypes.guess_type(attachment_path)
+
+    if content_type is None or encoding is not None:
+        content_type = 'application/octet-stream'
+
+    main, sub = content_type.split('/', 1)
+
+    with open(attachment_path, mode='rb') as f:
+        contents = f.read()
+
+    if main == 'text':
+        attach = MIMEText(contents, _subtype=sub)
+    elif main == 'image':
+        attach = MIMEImage(contents, _subtype=sub)
+    elif main == 'audio':
+        attach = MIMEAudio(contents, _subtype=sub)
+    else:
+        attach = MIMEBase(main, sub)
+        attach.set_payload(contents)
+
+    filename = os.path.basename(attachment_path)
+
+    attach.add_header('Content-Disposition', 'attachment', filename=filename)
+    message.attach(attach)
+
+    return message
 
 def send_gmail_message(service, user_id, message):
     result = service.users().messages().send(userId=user_id, body=message).execute()

@@ -62,7 +62,7 @@ def compose(request, thread_id):
             subject = form.cleaned_data['subject']
             cc = form.cleaned_data['cc']
             body = form.cleaned_data['body']
-            # attachment = request.FILES['attachment']
+            attachment_path = form.cleaned_data['attachment']
 
             sender = 'me' # FIXME This needs to be the logged in user's email
 
@@ -72,7 +72,7 @@ def compose(request, thread_id):
                 cc,
                 subject,
                 body,
-                attachment=None
+                attachment_path
             )
 
             service = settings._GMAIL_SERVICE
