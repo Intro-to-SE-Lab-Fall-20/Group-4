@@ -96,6 +96,12 @@ def emailview(request, thread_id):
 
     return render(request, 'main/view-email.html', {"message": message})
 
+def notes(request):
+    return render(request, 'main/notes.html')
+
+def notes_view(request):
+    return render(request, 'main/notes_view.html')
+
 def logout(request):
     auth.logout(request)
     return redirect('/')
