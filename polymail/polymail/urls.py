@@ -9,5 +9,8 @@ urlpatterns = [
     path('compose/<str:thread_id>/', views.compose, name="compose"),
     path('emailview/<str:thread_id>/', views.emailview, name="emailview"),
     path('admin/', admin.site.urls),
-    path('accounts/', include('allauth.urls'))
+    path('accounts/', include('allauth.urls')),
+    path('notes/', views.notes),
+    path('notes/<str:note_id', niews.notes_view)
+
 ]
