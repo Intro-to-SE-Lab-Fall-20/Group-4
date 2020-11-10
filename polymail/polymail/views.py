@@ -100,7 +100,7 @@ def notes(request):
     return render(request, 'main/notes.html')
 
 def notes_view(request, note_id):
-    if (note_id == 0):
+    if (note_id == '0'):
         return render(request, 'main/notes_view.html')
 
 def logout(request):

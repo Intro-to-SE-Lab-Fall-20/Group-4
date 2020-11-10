@@ -11,6 +11,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('allauth.urls')),
     path('notes/', views.notes),
-    path('notes/<str:note_id', niews.notes_view)
+    path('notes/<str:note_id>/', views.notes_view)
 
 ]
