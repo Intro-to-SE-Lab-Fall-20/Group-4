@@ -11,7 +11,3 @@ class EmailForm(forms.Form):
 
 class SearchForm(forms.Form):
         search_query = forms.CharField(label="Enter Search Term")
-
-class NotesForm(forms.Form):
-        title = forms.CharField(label="Title", required=True)
-        body = forms.CharField(label="Body", widget = forms.Textarea)

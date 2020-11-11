@@ -10,7 +10,6 @@ urlpatterns = [
     path('emailview/<str:thread_id>/', views.emailview, name="emailview"),
     path('admin/', admin.site.urls),
     path('accounts/', include('allauth.urls')),
-    path('notes/', views.notes),
-    path('notes/<str:note_id>/', views.notes_view)
-
+    path('polynotes/', views.polynotes, name="polynotes"),
+    path("delete_note/<int:note_id>/", views.delete_note, name="delete_note")
 ]
