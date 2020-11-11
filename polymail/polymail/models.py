@@ -66,6 +66,13 @@ class UserProfile(models.Model):
 
         return False
 
+class Note(models.Model):
+    title = models.CharField(max_length=255)
+    content = models.TextField(blank=True, null=True)
+
+    class Meta:
+        ordering = ('title',)
+
 def create_service_if_necessary(creds):
     if settings._GMAIL_SERVICE is None:
         service = build('gmail', 'v1', credentials=creds)

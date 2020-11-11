@@ -14,4 +14,4 @@ class SearchForm(forms.Form):
 
 class NotesForm(forms.Form):
         title = forms.CharField(label="Title", required=True)
-        
+        body = forms.CharField(label="Body", widget = forms.Textarea)
