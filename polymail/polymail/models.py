@@ -129,6 +129,7 @@ def send_gmail_message(service, user_id, message):
 def get_inbox(service, user_id):
     results = service.users().threads().list(userId=user_id).execute()
     threads = results['threads']
+    threads = threads[:10]
     messages_list = []
     for thread in threads:
         temp_dict = {}

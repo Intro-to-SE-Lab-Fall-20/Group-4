@@ -42,7 +42,7 @@
                 <tr>
                     <td>{{ message.Sender }}</td>
                     <td>{{ message.Subject }}</td>
-                    <td><a href="/emailview/{{ message.id }}/">{{ message.Snippet }}</a></td>
+                    <td><a href="/emailview/{{ message.id }}/">{% autoescape off %}{{ message.Snippet }}{% endautoescape %}</a></td>
                     <td><small>{{ message.Date }}</small></td>
                 </tr>
             {% endfor %}
