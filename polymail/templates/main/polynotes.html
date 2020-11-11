@@ -1,0 +1,42 @@
+<body>
+    <h1>PolyNotes</h1>
+
+    {# Options #}
+    <a href="{% url 'polynotes' %}?note_id=0">New Note</a>
+    <br><br>
+    <a href="/logout/">Logout</a>
+    <br><br><br>
+
+    <div class="column" style="float:left;width:40%">
+    <table class="table" class="table" border=1 frame=void rules=rows>
+        <tbody>
+            {% for note in notes %}
+            <tr>
+                <td>
+                    <a href="{% url 'polynotes' %}?note_id={{ note.id }}">{{ note.title }}</a>
+                </td>
+                <td><small>
+                    {{ note.created_at }}
+                </td></small>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    </div>
+    
+    <form method="post" action="{% url 'polynotes' %}">
+    {% csrf_token %}
+    <input type="hidden" name="note_id" value="{{ note_id }}">
+    <div class="column" style:"float:left;width:60%">
+            <input type="text" name="title" placeholder="Title" {% if note %} value="{{ note.title }}" {% endif %}>
+            <textarea name="content" placeholder="Content">{% if note %} {{ note.content }} {% endif %}</textarea>
+            <button type="submit" formmethod="post">Save</button>
+            {% if note %}
+                <a href="{% url 'delete_note' note.id %}">Delete</a>
+            {% endif %}
+    </div>
+    </form>
+
+    <br><br>
+    <a href="/">Return to Inbox</a>
+</body>

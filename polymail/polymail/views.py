@@ -5,6 +5,7 @@ from django.shortcuts import redirect, render
 
 from .forms import EmailForm, SearchForm
 from . import models
+from .models import Note
 
 def index(request):
     messages = None
@@ -95,6 +96,48 @@ def emailview(request, thread_id):
         message = models.get_specific_message(service, user_id='me', thread_id=thread_id)
 
     return render(request, 'main/view-email.html', {"message": message})
+
+def polynotes(request):
+    note_id = int(request.GET.get('note_id', 0))
+    notes = Note.objects.all()
+
+    if request.method == 'POST':
+        note_id = int(request.POST.get('note_id', 0))
+        title = request.POST.get('title')
+        content = request.POST.get('content', '')
+
+        if note_id != 0:
+            note = Note.objects.get(pk=note_id)
+            note.title = title
+            note.content = content
+            note.save()
+
+            return redirect('/polynotes/')
+
+        else:
+            note = Note.objects.create(title=title, content=content)
+
+            return redirect('/polynotes/')
+
+    if note_id > 0:
+        note = Note.objects.get(pk=note_id)
+    
+    else:
+        note = ''
+
+    context = {
+        'note_id': note_id,
+        'notes': notes,
+        'note': note
+    }
+
+    return render(request, 'main/polynotes.html', context)
+
+def delete_note(request, note_id):
+    note = Note.objects.get(pk=note_id)
+    note.delete()
+
+    return redirect('/polynotes/')
 
 def logout(request):
     auth.logout(request)

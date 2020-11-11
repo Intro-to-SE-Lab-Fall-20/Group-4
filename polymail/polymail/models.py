@@ -66,6 +66,15 @@ class UserProfile(models.Model):
 
         return False
 
+class Note(models.Model):
+    title = models.CharField(max_length=255)
+    content = models.TextField(blank=True, null=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ('title',)
+
 def create_service_if_necessary(creds):
     if settings._GMAIL_SERVICE is None:
         service = build('gmail', 'v1', credentials=creds)
@@ -129,6 +138,7 @@ def send_gmail_message(service, user_id, message):
 def get_inbox(service, user_id):
     results = service.users().threads().list(userId=user_id).execute()
     threads = results['threads']
+    threads = threads[:10]
     messages_list = []
     for thread in threads:
         temp_dict = {}

@@ -15,6 +15,8 @@
     {# Options #}
     <a href="/compose/0/">Compose Email</a>
     <br><br>
+    <a href="/polynotes/">Go to Notes</a>
+    <br><br>
     <a href="/logout/">Logout</a>
     <br><br>
 
@@ -25,8 +27,9 @@
             <button type="submit">SEARCH</button>
         </div>
     </form>
+    <br>
 
-    <table class="table">
+    <table class="table" border=1 frame=void rules=rows>
         <thead>
             <tr>
                 <th>From</th>
@@ -40,9 +43,10 @@
                 <tr>
                     <td>{{ message.Sender }}</td>
                     <td>{{ message.Subject }}</td>
-                    <td><a href="/emailview/{{ message.id }}/">{{ message.Snippet }}</a></td>
+                    <td><a href="/emailview/{{ message.id }}/">{% autoescape off %}{{ message.Snippet }}{% endautoescape %}</a></td>
                     <td><small>{{ message.Date }}</small></td>
                 </tr>
+                
             {% endfor %}
         </tbody>
     </table>
