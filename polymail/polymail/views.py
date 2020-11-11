@@ -3,7 +3,7 @@ import django.contrib.auth as auth
 from django.contrib.auth.models import User
 from django.shortcuts import redirect, render
 
-from .forms import EmailForm, SearchForm
+from .forms import EmailForm, SearchForm, NotesForm
 from . import models
 
 def index(request):
@@ -101,7 +101,8 @@ def notes(request):
 
 def notes_view(request, note_id):
     if (note_id == '0'):
-        return render(request, 'main/notes_view.html')
+        form = NotesForm()
+        return render(request, 'main/notes_view.html', {'form': form})
 
 def logout(request):
     auth.logout(request)

@@ -2,7 +2,13 @@
     <h1>Polymail Notes</h1>
     <h3>Your New Note</h3>
     
-        <p>Note Form will go here.</p>
+    <form method="post">
+        {% csrf_token %}
+        {{ form }}
+        <div class="form-actions">
+            <button type="submit">Save</button>
+        </div>
+    </form>
     
     <br><br><br>
     <a href="/notes/">Return to Notes Home</a>
